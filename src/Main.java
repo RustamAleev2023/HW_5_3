@@ -1,5 +1,6 @@
 import java.util.Arrays;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
@@ -8,7 +9,8 @@ public class Main {
 //        task2();
 //        task3();
 //        task4();
-        task5();
+//        task5();
+        task6();
     }
 
     //Task1
@@ -74,7 +76,7 @@ public class Main {
     }
 
     //Task4
-    public static void task4(){
+    public static void task4() {
         int[] numbers = new int[100];
         Random random = new Random();
 
@@ -90,8 +92,8 @@ public class Main {
         int count = 0;
 
         int k1 = 0;
-        while(k1 < numbers.length){
-            if(numbers[k1] > 0){
+        while (k1 < numbers.length) {
+            if (numbers[k1] > 0) {
                 result[count] = numbers[k1];
                 count++;
             }
@@ -99,16 +101,16 @@ public class Main {
         }
 
         int k2 = 0;
-        while(k2 < numbers.length){
-            if(numbers[k2] == 0){
+        while (k2 < numbers.length) {
+            if (numbers[k2] == 0) {
                 result[count] = numbers[k2];
                 count++;
             }
             k2++;
         }
         int k3 = 0;
-        while(k3 < numbers.length){
-            if(numbers[k3] < 0){
+        while (k3 < numbers.length) {
+            if (numbers[k3] < 0) {
                 result[count] = numbers[k3];
                 count++;
             }
@@ -119,49 +121,108 @@ public class Main {
         }
     }
 
-    public static void task5(){
+    public static void task5() {
+
+        int indexStartBest = -1;
+        int lengthBest = 0;
+        int indexStartCurrent = -1;
+        int lengthCurrent = 0;
 
         int[] numbers = new int[20];
-        int[][] positiveNumLargestLength = new int[2][20];
-        int count = 0;
-        int index = 0;
         Random random = new Random();
 
         for (int i = 0; i < numbers.length; i++) {
             numbers[i] = random.nextInt(-10, 20);
+            System.out.print(numbers[i] + " ");
         }
-
-        System.out.println("Исходный массив: \n" + Arrays.toString(numbers) + "\n");
+        System.out.println();
 
         for (int i = 0; i < numbers.length; i++) {
             if (numbers[i] > 0) {
-                count++;
-            } else {
-                positiveNumLargestLength[0][i] = i; // конечный индекс диапазона позитивных значений
-                positiveNumLargestLength[1][i] = count; // количество позитивных значений в этом диапазоне
-                count = 0;
+                if (lengthCurrent == 0)
+                    indexStartCurrent = i;
+                lengthCurrent++;
+            }
+
+            if (numbers[i] <= 0 || i == numbers.length - 1) {
+                if (lengthCurrent > lengthBest) {
+                    indexStartBest = indexStartCurrent;
+                    lengthBest = lengthCurrent;
+                }
+                lengthCurrent = 0;
             }
         }
-        count = 0;
+
+        System.out.println("Максимальная длина = " + lengthBest);
+
+        int[] result = new int[lengthBest];
+        int count = 0;
+        for (int i = indexStartBest; i < indexStartBest + lengthBest; i++) {
+            result[count] = numbers[i];
+            System.out.print(result[count] + " ");
+            count++;
+        }
+        System.out.println();
+    }
+
+    //Task6
+    public static void task6() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Ввести размер квадратного массива");
+        int n = scanner.nextInt();
+        int min = 0;
+        int max = 0;
+
+        Random random = new Random();
+        int[][] numbers = new int[n][n];
+
         for (int i = 0; i < numbers.length; i++) {
-            if (positiveNumLargestLength[1][i] > count) {
-                count = positiveNumLargestLength[1][i];
-                index = i;
+            for (int j = 0; j < numbers[0].length; j++) {
+                numbers[i][j] = random.nextInt();
+                System.out.print(numbers[i][j] + " ");
+                if (numbers[i][j] < min) {
+                    min = numbers[i][j];
+                }
+                if (numbers[i][j] > max) {
+                    max = numbers[i][j];
+                }
+            }
+            System.out.println();
+        }
+
+        int temp = numbers[0][0];
+
+        long startTime = System.nanoTime();
+        for (int i = 0; i < numbers.length; i++) {
+            for (int j = 0; j < numbers[0].length; j++) {
+                if (numbers[i][j] < min) {
+                    min = numbers[i][j];
+                }
+                if (numbers[i][j] > max) {
+                    max = numbers[i][j];
+                }
             }
         }
 
-        System.out.print("Самый длинный фрагмент - [");
+        for (int i = 0; i < numbers.length; i++) {
+            for (int j = 0; j < numbers[0].length; j++) {
+                if (!(i == 0 && j == 0)) {
+                    if(numbers[i][j] == temp){
+                        System.out.println("Строка: " + i + " Столбец: " + j);
 
-        for (int i = (index - count); i < index; i++) {
-            if (i == index - count) {
-                System.out.print(numbers[i] + ",");
-            } else if (i == (index - 1)) {
-                System.out.print(" " + numbers[i]);
-            } else {
-                System.out.print(" " + numbers[i] + ",");
+                    }
+                }
             }
         }
-        System.out.print("]");
+
+        System.out.println("Max = " + max);
+        System.out.println("Min = " + min);
+
+        long finishTime = System.nanoTime();
+
+        System.out.println("Время выполнения поиска = " + (finishTime - startTime) + "нс");
+
+
     }
 
 }
