@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.Random;
 
 public class Main {
@@ -6,7 +7,8 @@ public class Main {
 //        task1();
 //        task2();
 //        task3();
-        task4();
+//        task4();
+        task5();
     }
 
     //Task1
@@ -73,7 +75,7 @@ public class Main {
 
     //Task4
     public static void task4(){
-        int[] numbers = new int[10];
+        int[] numbers = new int[100];
         Random random = new Random();
 
 
@@ -83,7 +85,7 @@ public class Main {
         }
         System.out.println();
 
-        int[] result = new int[10];
+        int[] result = new int[100];
 
         int count = 0;
 
@@ -115,7 +117,51 @@ public class Main {
         for (int i1 = 0; i1 < result.length; i1++) {
             System.out.print(result[i1] + " ");
         }
+    }
 
+    public static void task5(){
+
+        int[] numbers = new int[20];
+        int[][] positiveNumLargestLength = new int[2][20];
+        int count = 0;
+        int index = 0;
+        Random random = new Random();
+
+        for (int i = 0; i < numbers.length; i++) {
+            numbers[i] = random.nextInt(-10, 20);
+        }
+
+        System.out.println("Исходный массив: \n" + Arrays.toString(numbers) + "\n");
+
+        for (int i = 0; i < numbers.length; i++) {
+            if (numbers[i] > 0) {
+                count++;
+            } else {
+                positiveNumLargestLength[0][i] = i; // конечный индекс диапазона позитивных значений
+                positiveNumLargestLength[1][i] = count; // количество позитивных значений в этом диапазоне
+                count = 0;
+            }
+        }
+        count = 0;
+        for (int i = 0; i < numbers.length; i++) {
+            if (positiveNumLargestLength[1][i] > count) {
+                count = positiveNumLargestLength[1][i];
+                index = i;
+            }
+        }
+
+        System.out.print("Самый длинный фрагмент - [");
+
+        for (int i = (index - count); i < index; i++) {
+            if (i == index - count) {
+                System.out.print(numbers[i] + ",");
+            } else if (i == (index - 1)) {
+                System.out.print(" " + numbers[i]);
+            } else {
+                System.out.print(" " + numbers[i] + ",");
+            }
+        }
+        System.out.print("]");
     }
 
 }
