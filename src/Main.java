@@ -12,7 +12,8 @@ public class Main {
 //        task5();
 //        task6();
 //        task7();
-        task8();
+//        task8();
+        task9();
     }
 
     //Task1
@@ -170,7 +171,7 @@ public class Main {
     //Task6
     public static void task6() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Ввести размер квадратного массива");
+        System.out.println("Введите размер квадратного массива");
         int n = scanner.nextInt();
         int min = 0;
         int max = 0;
@@ -229,7 +230,7 @@ public class Main {
     //Task7
     public static void task7() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Ввести размер квадратного массива");
+        System.out.println("Введите размер квадратного массива");
         int n = scanner.nextInt();
         int[][] numbers = new int[n][n];
 
@@ -251,7 +252,7 @@ public class Main {
     //Task8
     public static void task8() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Ввести размер квадратного массива");
+        System.out.println("Введите размер квадратного массива");
         int n = scanner.nextInt();
         int[][] numbers = new int[n][n];
         //очерчиваем прямоугольники, каждый их которых на единицу меньше с каждой стороны
@@ -290,4 +291,93 @@ public class Main {
         }
     }
 
+    //Task9
+    public static void task9() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Введите высоту массива");
+        int n = scanner.nextInt();
+        System.out.println("Введите ширину массива");
+        int m = scanner.nextInt();
+
+        int[][] numbers = new int[n][m];
+
+        int value = 1;
+        for(int i = 0; i < n; i++) {
+            for(int j = 0; j < m; j++)  {
+                numbers[i][j] = value++;
+            }
+        }
+
+//        printArray(numbers);
+//        System.out.println("");
+        printArray(diagonal(numbers));
+
+    }
+    static int[][] diagonal(int[][] input) {
+
+        final int numRows = input.length;
+        final int numColumns = input[0].length;
+        int[][] result = new int[numRows][numColumns];
+
+
+        int rowIndex = 0;
+        int columnIndex = 0;
+
+        int currentRow = 0;
+        int currentColumn = 0;
+
+        for(int i = 0; i < numRows; i++) {
+            for(int j = 0; j < numColumns; j++) {
+                result[currentRow][currentColumn] = input[i][j];
+                //если наша текущая строка находится внизу, мы должны проверить,
+                // следует ли нам перейти наверх или пройти вдоль правой границы
+                if(currentRow == numRows - 1) {
+
+                    if(numRows < numColumns && columnIndex < numColumns - 1 ) {
+                        //передвигаем текущую строку вниз на линию
+                        currentRow = 0;
+                        //сбрасываем столбцы направо
+                        currentColumn = ++columnIndex;
+                    }
+
+                    //если квадратный массив, то используем rowIndex
+                    else {
+                        //передвигаем текущую строку вниз на линию
+                        currentRow = ++rowIndex;
+                        //сбрасываем столбцы направо
+                        currentColumn = numColumns - 1;
+                    }
+                }
+                //проверяем что достигли левого края
+                else if(currentColumn == 0) {
+                    //можем переместить columnIndex правее
+                    if(columnIndex < numColumns - 1) {
+                        currentRow = rowIndex;
+                        currentColumn = ++columnIndex;
+                    }
+
+                    //мы у правого края поэтому перемещаемся ниже
+                    else {
+                        currentColumn = columnIndex;
+                        currentRow = ++rowIndex;
+                    }
+                }
+                //иначе мы дем вниз и налево по диагонали
+                else {
+                    currentRow++;
+                    currentColumn--;
+                }
+
+            }
+        }
+        return result;
+    }
+    static void printArray(int[][] array) {
+        for (int i = 0; i < array.length; i++) {
+            for (int j = 0; j < array[0].length; j++) {
+                System.out.print(array[i][j] + "\t");
+            }
+            System.out.println();
+        }
+    }
 }
