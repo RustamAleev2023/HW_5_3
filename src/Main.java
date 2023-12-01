@@ -10,7 +10,9 @@ public class Main {
 //        task3();
 //        task4();
 //        task5();
-        task6();
+//        task6();
+//        task7();
+        task8();
     }
 
     //Task1
@@ -207,7 +209,7 @@ public class Main {
         for (int i = 0; i < numbers.length; i++) {
             for (int j = 0; j < numbers[0].length; j++) {
                 if (!(i == 0 && j == 0)) {
-                    if(numbers[i][j] == temp){
+                    if (numbers[i][j] == temp) {
                         System.out.println("Строка: " + i + " Столбец: " + j);
 
                     }
@@ -222,7 +224,70 @@ public class Main {
 
         System.out.println("Время выполнения поиска = " + (finishTime - startTime) + "нс");
 
+    }
 
+    //Task7
+    public static void task7() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Ввести размер квадратного массива");
+        int n = scanner.nextInt();
+        int[][] numbers = new int[n][n];
+
+        //нечетные строки - обратный порядок заполнения
+        for (int i = 0, m = n * n; i < m; ) {
+            int row = i / n;
+            int col = row % 2 == 0 ? i % n : n - 1 - i % n;
+            numbers[row][col] = ++i;
+        }
+
+        for (int i = 0; i < numbers.length; i++) {
+            for (int j = 0; j < numbers[0].length; j++) {
+                System.out.print(numbers[i][j] + "\t");
+            }
+            System.out.println();
+        }
+    }
+
+    //Task8
+    public static void task8() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Ввести размер квадратного массива");
+        int n = scanner.nextInt();
+        int[][] numbers = new int[n][n];
+        //очерчиваем прямоугольники, каждый их которых на единицу меньше с каждой стороны
+        int iStart = 0;
+        int iEnd = 0;
+        int jStart = 0;
+        int jEnd = 0;
+        int i = 0;
+        int j = 0;
+        int counter = 1;
+
+        while (counter <= n * n) {
+            numbers[i][j] = counter;
+            if (i == iStart && j < (n - jEnd - 1)) {
+                ++j;
+            } else if (j == (n - jEnd - 1) && i < (n - iEnd - 1)) {
+                ++i;
+            } else if (i == (n - iEnd - 1) && j > jStart) {
+                --j;
+            } else {
+                --i;
+            }
+            if ((i == iStart + 1) && (j == jStart) && (jStart != (n - jEnd - 1))) {
+                ++iStart;
+                ++iEnd;
+                ++jStart;
+                ++jEnd;
+            }
+            ++counter;
+        }
+        for (int i1 = 0; i1 < numbers.length; i1++) {
+            for (int j1 = 0; j1 < numbers[0].length; j1++) {
+                System.out.print(numbers[i1][j1] + "\t");
+            }
+            System.out.println();
+        }
     }
 
 }
