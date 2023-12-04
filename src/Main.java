@@ -1,6 +1,8 @@
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Main {
     public static void main(String[] args) {
@@ -13,7 +15,8 @@ public class Main {
 //        task6();
 //        task7();
 //        task8();
-        task9();
+//        task9();
+        task10();
     }
 
     //Task1
@@ -255,7 +258,7 @@ public class Main {
         System.out.println("Введите размер квадратного массива");
         int n = scanner.nextInt();
         int[][] numbers = new int[n][n];
-        //очерчиваем прямоугольники, каждый их которых на единицу меньше с каждой стороны
+
         int iStart = 0;
         int iEnd = 0;
         int jStart = 0;
@@ -264,6 +267,7 @@ public class Main {
         int j = 0;
         int counter = 1;
 
+        //очерчиваем прямоугольники, каждый из которых на единицу меньше с каждой стороны
         while (counter <= n * n) {
             numbers[i][j] = counter;
             if (i == iStart && j < (n - jEnd - 1)) {
@@ -302,17 +306,18 @@ public class Main {
         int[][] numbers = new int[n][m];
 
         int value = 1;
-        for(int i = 0; i < n; i++) {
-            for(int j = 0; j < m; j++)  {
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
                 numbers[i][j] = value++;
             }
         }
 
 //        printArray(numbers);
-//        System.out.println("");
+//        System.out.println();
         printArray(diagonal(numbers));
 
     }
+
     static int[][] diagonal(int[][] input) {
 
         final int numRows = input.length;
@@ -326,14 +331,14 @@ public class Main {
         int currentRow = 0;
         int currentColumn = 0;
 
-        for(int i = 0; i < numRows; i++) {
-            for(int j = 0; j < numColumns; j++) {
+        for (int i = 0; i < numRows; i++) {
+            for (int j = 0; j < numColumns; j++) {
                 result[currentRow][currentColumn] = input[i][j];
                 //если наша текущая строка находится внизу, мы должны проверить,
-                // следует ли нам перейти наверх или пройти вдоль правой границы
-                if(currentRow == numRows - 1) {
+                // следует ли нам перейти наверх или пройти вправо
+                if (currentRow == numRows - 1) {
 
-                    if(numRows < numColumns && columnIndex < numColumns - 1 ) {
+                    if (numRows < numColumns && columnIndex < numColumns - 1) {
                         //передвигаем текущую строку вниз на линию
                         currentRow = 0;
                         //сбрасываем столбцы направо
@@ -349,9 +354,9 @@ public class Main {
                     }
                 }
                 //проверяем что достигли левого края
-                else if(currentColumn == 0) {
+                else if (currentColumn == 0) {
                     //можем переместить columnIndex правее
-                    if(columnIndex < numColumns - 1) {
+                    if (columnIndex < numColumns - 1) {
                         currentRow = rowIndex;
                         currentColumn = ++columnIndex;
                     }
@@ -372,6 +377,7 @@ public class Main {
         }
         return result;
     }
+
     static void printArray(int[][] array) {
         for (int i = 0; i < array.length; i++) {
             for (int j = 0; j < array[0].length; j++) {
@@ -379,5 +385,71 @@ public class Main {
             }
             System.out.println();
         }
+    }
+
+    //Task10
+    public static void task10() {
+        Scanner scanner = new Scanner(System.in);
+        int n = 4;
+        int m = 6;
+
+        System.out.println("Введите кол-во билетов (не более " + m + ")");
+        int k = scanner.nextInt();
+
+        int[][] numbers = new int[n][m];
+        Random random = new Random();
+
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                numbers[i][j] = random.nextInt(2);
+                System.out.print(numbers[i][j] + "\t");
+            }
+            System.out.println();
+        }
+
+        if (!isAvailable(k, numbers)) {
+            System.out.println("Вы не сможете сесть рядом ни в одном ряду");
+        }
+
+    }
+
+    public static boolean isAvailable(int k, int[][] numbers) {
+        boolean result = false;
+
+        StringBuffer stringBuffer = new StringBuffer();
+        for (int i = 0; i < k; i++) {
+            stringBuffer.append('0');
+        }
+        String regex = stringBuffer.toString();
+        Pattern pattern = Pattern.compile(regex);
+        String[] rows = new String[numbers.length];
+        for (int i = 0; i < numbers.length; i++) {
+            StringBuffer sb = new StringBuffer();
+            for (int j = 0; j < numbers[i].length; j++) {
+                sb.append(numbers[i][j]);
+            }
+            rows[i] = sb.toString();
+
+
+            Matcher matcher = pattern.matcher(rows[i]);
+            int counter = 0;
+            int start = 0;
+            int end = 0;
+            while (matcher.find()) {
+                result = true;
+                counter++;
+                start = matcher.start();
+                end = matcher.end();
+                System.out.println("start = " + start);
+                System.out.println("end = " + end);
+            }
+            System.out.println("Counter = " + counter);
+
+
+
+
+        }
+
+        return result;
     }
 }
