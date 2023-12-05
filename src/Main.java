@@ -1,8 +1,6 @@
 import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class Main {
     public static void main(String[] args) {
@@ -390,8 +388,12 @@ public class Main {
     //Task10
     public static void task10() {
         Scanner scanner = new Scanner(System.in);
-        int n = 4;
-        int m = 6;
+//        int n = 4;
+//        int m = 6;
+        System.out.println("Введите кол-во рядов");
+        int n = scanner.nextInt();
+        System.out.println("Введите кол-во мест в ряду");
+        int m = scanner.nextInt();
 
         System.out.println("Введите кол-во билетов (не более " + m + ")");
         int k = scanner.nextInt();
@@ -406,6 +408,7 @@ public class Main {
             }
             System.out.println();
         }
+        System.out.println("===========================================");
 
         if (!isAvailable(k, numbers)) {
             System.out.println("Вы не сможете сесть рядом ни в одном ряду");
@@ -415,41 +418,40 @@ public class Main {
 
     public static boolean isAvailable(int k, int[][] numbers) {
         boolean result = false;
-
-        StringBuffer stringBuffer = new StringBuffer();
-        for (int i = 0; i < k; i++) {
-            stringBuffer.append('0');
-        }
-        String regex = stringBuffer.toString();
-        Pattern pattern = Pattern.compile(regex);
-        String[] rows = new String[numbers.length];
         for (int i = 0; i < numbers.length; i++) {
-            StringBuffer sb = new StringBuffer();
-            for (int j = 0; j < numbers[i].length; j++) {
-                sb.append(numbers[i][j]);
-            }
-            rows[i] = sb.toString();
-
-
-            Matcher matcher = pattern.matcher(rows[i]);
-            int counter = 0;
-            int start = 0;
-            int end = 0;
-            while (matcher.find()) {
-                result = true;
-                counter++;
-                start = matcher.start();
-                end = matcher.end();
-                System.out.println("start = " + start);
-                System.out.println("end = " + end);
-            }
-            System.out.println("Counter = " + counter);
-
-
-
-
+           if(rowHasNextKFreePlaces(k, numbers[i], i + 1)){
+               result = true ;
+           }
         }
+        return result;
+    }
 
+    public static boolean rowHasNextKFreePlaces(int k, int[] numbers, int row) {
+        int count = 0;
+        int groupCount = 0;
+        int start = -1;
+        int end = -1;
+        boolean result = false;
+
+        for (int i = 0; i < numbers.length; i++) {
+            if (numbers[i] == 0) {
+                count++;
+                if (count == k) {
+                    groupCount++;
+                    start = i - (k - 1);
+                    end = i;
+                    result = true;
+                }
+                if (count > k) {
+                    end = i;
+                }
+            } else {
+                count = 0;
+            }
+        }
+        if (groupCount != 0) {
+            System.out.println("В " + row + " ряду вы можете занять места с " + (start + 1) + " по " + (end + 1));
+        }
         return result;
     }
 }
