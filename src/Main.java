@@ -510,7 +510,7 @@ public class Main {
             return "";
         }
         if (number <= 9) {
-            return words.dig1[0][number - 1];
+            return words.dig1[number - 1];
         } else if (number <= 19) {
             return words.dig10[number % 10];
         } else {
