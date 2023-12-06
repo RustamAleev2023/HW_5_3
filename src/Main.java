@@ -1,6 +1,6 @@
-import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
+
 
 public class Main {
     public static void main(String[] args) {
@@ -14,7 +14,10 @@ public class Main {
 //        task7();
 //        task8();
 //        task9();
-        task10();
+//        task10();
+//        task11();
+        task12();
+
     }
 
     //Task1
@@ -322,7 +325,6 @@ public class Main {
         final int numColumns = input[0].length;
         int[][] result = new int[numRows][numColumns];
 
-
         int rowIndex = 0;
         int columnIndex = 0;
 
@@ -419,9 +421,9 @@ public class Main {
     public static boolean isAvailable(int k, int[][] numbers) {
         boolean result = false;
         for (int i = 0; i < numbers.length; i++) {
-           if(rowHasNextKFreePlaces(k, numbers[i], i + 1)){
-               result = true ;
-           }
+            if (rowHasNextKFreePlaces(k, numbers[i], i + 1)) {
+                result = true;
+            }
         }
         return result;
     }
@@ -453,5 +455,85 @@ public class Main {
             System.out.println("В " + row + " ряду вы можете занять места с " + (start + 1) + " по " + (end + 1));
         }
         return result;
+    }
+
+    //Task11
+    public static void task11() {
+
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Введите число в диапазоне от 0 до 1 000 000 включительно");
+        int number = scanner.nextInt();
+
+        if (number == 1_000_000) {
+            System.out.println("один миллион");
+        } else if (number == 0) {
+            System.out.println("ноль");
+        } else {
+            System.out.println(generate(number).trim());
+        }
+
+
+    }
+
+    //конвертируем в текст с помощью рекурсии
+    public static String generate(int number) {
+        NumbersByWords words = new NumbersByWords();
+        if (number > 0 && number < 100) {
+            return generate1To99(number);
+        } else if (number >= 100 && number < 1000) {
+            return words.dig100[number / 100] + " " + generate1To99(number % 100);
+        } else if (number >= 1000 && number < 10_000) {
+            return words.dig1000[number / 1000] + " " + generate(number % 1000);
+        } else if (number >= 10_000 && number < 20_000) {
+            return generate(number / 1_000) + " тысяч " + generate(number % 1000);
+        } else if (number >= 20_000 && number < 100_000) {
+            return words.dig20[number / 10_000 - 2] + " " + words.dig1000[(number % 10_000) / 1_000] + " " + generate(number % 1000);
+        }
+        else if (number >= 100_000) {
+            if (((number / 1_000) % 100)/10 >= 2){//(20_000-99_999)+(100_000 - 900_000)
+                return words.dig100[number / 100_000] + " " + words.dig20[((number / 1_000) % 100)/10-2]
+                + " " + words.dig1000[((number / 1_000) % 100)%10] + " " + generate(number % 1000);
+            } else if(((number / 1_000) % 100)/10 == 1){//(10_000-19_999)+(100_000 - 900_000)
+                return words.dig100[number / 100_000] + " " + words.dig10[((number / 1_000) % 100)%10] + " тысяч " + generate(number % 1000);
+            }
+            else {//(0-9_999)+(100_000 - 900_000)
+                return words.dig100[number / 100_000] + " " + words.dig1000[(number%10_000) / 1_000] + " " + generate(number % 1000);
+            }
+
+        } else return generate1To99(number);
+
+    }
+
+    public static String generate1To99(int number) {
+        NumbersByWords words = new NumbersByWords();
+        if (number == 0) {
+            return "";
+        }
+        if (number <= 9) {
+            return words.dig1[0][number - 1];
+        } else if (number <= 19) {
+            return words.dig10[number % 10];
+        } else {
+            return words.dig20[number / 10 - 2] + " " + generate1To99(number % 10);
+        }
+    }
+
+//    public static String generate1To99Female(int number) {
+//        NumbersByWords words = new NumbersByWords();
+//        if (number == 0) {
+//            return "";
+//        }
+//        if (number <= 9) {
+//            return words.dig1000[number - 1];
+//        } else if (number <= 19) {
+//            return words.dig10[number % 10];
+//        } else {
+//            return words.dig20[number / 10 - 2] + " " + generate1To99Female(number % 10);
+//        }
+//    }
+
+    //Task12
+    public static void task12(){
+
     }
 }
