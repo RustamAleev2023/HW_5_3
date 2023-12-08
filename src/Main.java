@@ -15,7 +15,7 @@ public class Main {
 //        task9();
 //        task10();
 //        task11();
-        task12();
+//        task12();
 
     }
 
@@ -457,6 +457,17 @@ public class Main {
     }
 
     //Task11
+    public static String zero = "ноль";
+    public static String[] dig1 = {"один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять"};
+    public static String[] dig10  = {"десять","одиннадцать", "двенадцать", "тринадцать", "четырнадцать",
+            "пятнадцать", "шестнадцать", "семнадцать", "восемнадцать", "девятнадцать"};
+    public static String[] dig20  = {"двадцать", "тридцать", "сорок", "пятьдесят",
+            "шестьдесят", "семьдесят", "восемьдесят", "девяносто"};
+    public static String[] dig100 = {"","сто","двести", "триста", "четыреста", "пятьсот",
+            "шестьсот", "семьсот", "восемьсот", "девятьсот"};
+    public static String[] dig1000 = {"тысяч", "одна тысяча", "две тысячи", "три тысячи", "четыре тысячи", "пять тысяч", "шесть тысяч", "семь тысяч", "восемь тысяч", "девять тысяч"};
+    public static String million = "один миллион";
+
     public static void task11() {
 
         Scanner scanner = new Scanner(System.in);
@@ -464,9 +475,9 @@ public class Main {
         int number = scanner.nextInt();
 
         if (number == 1_000_000) {
-            System.out.println("один миллион");
+            System.out.println(million);
         } else if (number == 0) {
-            System.out.println("ноль");
+            System.out.println(zero);
         } else {
             System.out.println(generate(number).trim());
         }
@@ -476,25 +487,24 @@ public class Main {
 
     //конвертируем в текст с помощью рекурсии
     public static String generate(int number) {
-        Task11NumbersByWords words = new Task11NumbersByWords();
         if (number > 0 && number < 100) {
             return generate1To99(number);
         } else if (number >= 100 && number < 1000) {
-            return words.dig100[number / 100] + " " + generate1To99(number % 100);
+            return dig100[number / 100] + " " + generate1To99(number % 100);
         } else if (number >= 1000 && number < 10_000) {
-            return words.dig1000[number / 1000] + " " + generate(number % 1000);
+            return dig1000[number / 1000] + " " + generate(number % 1000);
         } else if (number >= 10_000 && number < 20_000) {
             return generate(number / 1_000) + " тысяч " + generate(number % 1000);
         } else if (number >= 20_000 && number < 100_000) {
-            return words.dig20[number / 10_000 - 2] + " " + words.dig1000[(number % 10_000) / 1_000] + " " + generate(number % 1000);
+            return dig20[number / 10_000 - 2] + " " + dig1000[(number % 10_000) / 1_000] + " " + generate(number % 1000);
         } else if (number >= 100_000) {
             if (((number / 1_000) % 100) / 10 >= 2) {//(20_000-99_999)+(100_000 - 900_000)
-                return words.dig100[number / 100_000] + " " + words.dig20[((number / 1_000) % 100) / 10 - 2]
-                        + " " + words.dig1000[((number / 1_000) % 100) % 10] + " " + generate(number % 1000);
+                return dig100[number / 100_000] + " " + dig20[((number / 1_000) % 100) / 10 - 2]
+                        + " " + dig1000[((number / 1_000) % 100) % 10] + " " + generate(number % 1000);
             } else if (((number / 1_000) % 100) / 10 == 1) {//(10_000-19_999)+(100_000 - 900_000)
-                return words.dig100[number / 100_000] + " " + words.dig10[((number / 1_000) % 100) % 10] + " тысяч " + generate(number % 1000);
+                return dig100[number / 100_000] + " " + dig10[((number / 1_000) % 100) % 10] + " тысяч " + generate(number % 1000);
             } else {//(0-9_999)+(100_000 - 900_000)
-                return words.dig100[number / 100_000] + " " + words.dig1000[(number % 10_000) / 1_000] + " " + generate(number % 1000);
+                return dig100[number / 100_000] + " " + dig1000[(number % 10_000) / 1_000] + " " + generate(number % 1000);
             }
 
         } else return generate1To99(number);
@@ -502,16 +512,15 @@ public class Main {
     }
 
     public static String generate1To99(int number) {
-        Task11NumbersByWords words = new Task11NumbersByWords();
         if (number == 0) {
             return "";
         }
         if (number <= 9) {
-            return words.dig1[number - 1];
+            return dig1[number - 1];
         } else if (number <= 19) {
-            return words.dig10[number % 10];
+            return dig10[number % 10];
         } else {
-            return words.dig20[number / 10 - 2] + " " + generate1To99(number % 10);
+            return dig20[number / 10 - 2] + " " + generate1To99(number % 10);
         }
     }
 
