@@ -524,19 +524,7 @@ public class Main {
         }
     }
 
-//    public static String generate1To99Female(int number) {
-//        NumbersByWords words = new NumbersByWords();
-//        if (number == 0) {
-//            return "";
-//        }
-//        if (number <= 9) {
-//            return words.dig1000[number - 1];
-//        } else if (number <= 19) {
-//            return words.dig10[number % 10];
-//        } else {
-//            return words.dig20[number / 10 - 2] + " " + generate1To99Female(number % 10);
-//        }
-//    }
+
 
     //Task12
 
