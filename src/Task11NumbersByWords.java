@@ -1,4 +1,4 @@
-public class NumbersByWords {
+public class Task11NumbersByWords {
     public String zero = "ноль";
     public String[] dig1 = {"один", "два", "три", "четыре", "пять", "шесть", "семь", "восемь", "девять"};
     public String[] dig10  = {"десять","одиннадцать", "двенадцать", "тринадцать", "четырнадцать",

@@ -1,5 +1,4 @@
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 
 public class Main {
@@ -477,7 +476,7 @@ public class Main {
 
     //конвертируем в текст с помощью рекурсии
     public static String generate(int number) {
-        NumbersByWords words = new NumbersByWords();
+        Task11NumbersByWords words = new Task11NumbersByWords();
         if (number > 0 && number < 100) {
             return generate1To99(number);
         } else if (number >= 100 && number < 1000) {
@@ -488,16 +487,14 @@ public class Main {
             return generate(number / 1_000) + " тысяч " + generate(number % 1000);
         } else if (number >= 20_000 && number < 100_000) {
             return words.dig20[number / 10_000 - 2] + " " + words.dig1000[(number % 10_000) / 1_000] + " " + generate(number % 1000);
-        }
-        else if (number >= 100_000) {
-            if (((number / 1_000) % 100)/10 >= 2){//(20_000-99_999)+(100_000 - 900_000)
-                return words.dig100[number / 100_000] + " " + words.dig20[((number / 1_000) % 100)/10-2]
-                + " " + words.dig1000[((number / 1_000) % 100)%10] + " " + generate(number % 1000);
-            } else if(((number / 1_000) % 100)/10 == 1){//(10_000-19_999)+(100_000 - 900_000)
-                return words.dig100[number / 100_000] + " " + words.dig10[((number / 1_000) % 100)%10] + " тысяч " + generate(number % 1000);
-            }
-            else {//(0-9_999)+(100_000 - 900_000)
-                return words.dig100[number / 100_000] + " " + words.dig1000[(number%10_000) / 1_000] + " " + generate(number % 1000);
+        } else if (number >= 100_000) {
+            if (((number / 1_000) % 100) / 10 >= 2) {//(20_000-99_999)+(100_000 - 900_000)
+                return words.dig100[number / 100_000] + " " + words.dig20[((number / 1_000) % 100) / 10 - 2]
+                        + " " + words.dig1000[((number / 1_000) % 100) % 10] + " " + generate(number % 1000);
+            } else if (((number / 1_000) % 100) / 10 == 1) {//(10_000-19_999)+(100_000 - 900_000)
+                return words.dig100[number / 100_000] + " " + words.dig10[((number / 1_000) % 100) % 10] + " тысяч " + generate(number % 1000);
+            } else {//(0-9_999)+(100_000 - 900_000)
+                return words.dig100[number / 100_000] + " " + words.dig1000[(number % 10_000) / 1_000] + " " + generate(number % 1000);
             }
 
         } else return generate1To99(number);
@@ -505,7 +502,7 @@ public class Main {
     }
 
     public static String generate1To99(int number) {
-        NumbersByWords words = new NumbersByWords();
+        Task11NumbersByWords words = new Task11NumbersByWords();
         if (number == 0) {
             return "";
         }
@@ -533,7 +530,83 @@ public class Main {
 //    }
 
     //Task12
-    public static void task12(){
 
+    //Комбинации возможных вариантов хода "конем"
+    public static int[] row = { 2, 1, -1, -2, -2, -1, 1, 2, 2 };
+    public static int[] col = { 1, 2, 2, 1, -1, -2, -2, -1, 1 };
+    public static int n;
+
+    public static void task12(){
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Программа выводит в консоль все возможные варианты перемещения, \n" +
+                "все они начинаются с позиции(0,0), но далее могут идти по разным путям." +
+                "\nПоэтому чем длиннее сторона поля - тем больше возможных комбинаций " +
+                "\nи тем больше времени потребуется на перебор и вывод всех вариантов\n");
+        System.out.println("Введите размер стороны поля");
+        n = scanner.nextInt();
+
+        //создаем поле
+        int[][] map = new int[n][n];
+
+        //заполняем поле нулями
+        for (int i = 0; i < map.length; i++){
+            for (int j = 0; j < map[i].length; j++) {
+                map[i][j] = 0;
+            }
+        }
+        //начинаем заполнять с 1
+        int count = 1;
+
+        //начинаем заполнение с ячейки (0, 0)`
+        move(map, 0, 0, count);
     }
+
+    // Проверяем, что координаты попадают внутрь поля
+    private static boolean isValid(int x, int y) {
+        if (x < 0 || y < 0 || x >= n || y >= n){
+            return false;
+        }
+
+        return true;
+    }
+
+    //Метод вывода в консоль
+    private static void print(int[][] map){
+        for (var r: map) {
+            System.out.println(Arrays.toString(r));
+        }
+        System.out.println();
+    }
+
+
+    //Рекурсивный метод передвижения "ходом коня" c использованием возврата при занятой следующей(следующих) ячейки
+    public static void move(int[][] map, int x, int y, int count){
+        // заполняем текущую ячейку текущим значением счетчика
+        map[x][y] = count;
+
+        // если все ячейки заполнены - печатаем массив
+        if (count >= n * n) {
+            print(map);
+//            map[x][y] = 0;
+//            return;
+        }
+
+        //последовательно перебираем все восемь возможных "ходов конем" на их валидность
+        for (int k = 0; k < 8; k++){
+
+            //получаем координаты следующей ячейки
+            int newX = x + row[k];
+            int newY = y + col[k];
+
+            //проверяем, что следующая ячейка находится в поле и она не заполнена
+            if (isValid(newX, newY) && map[newX][newY] == 0) {
+                move(map, newX, newY, count + 1);
+            }
+        }
+
+        //откатываемся назад из текущего положения
+        map[x][y] = 0;
+    }
+
 }
